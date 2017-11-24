@@ -6,12 +6,9 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-
 import javafx.scene.control.Label;
 
-
-
-public class Cipher extends Application {
+public class GUI extends Application {
 
     private TextArea plainText = new TextArea();
     private TextArea encryptedText = new TextArea();
@@ -20,9 +17,13 @@ public class Cipher extends Application {
     private Button encrypt = new Button("Encrypt");
     private Button decrypt = new Button("Decrypt");
 
+    /* create an instance of cipher tools*/
+    private CaesarCipher tool = new CaesarCipher();
+
     @Override
     public void start(Stage primaryStage) {
 
+        //create basic layout
         GridPane gridPane = new GridPane();
         gridPane.setPadding(new Insets(10));
         gridPane.setHgap(5);
@@ -45,52 +46,22 @@ public class Cipher extends Application {
         gridPane.add(encrypt,0,4);
         gridPane.add(decrypt, 1,4);
 
+        //implement tool methods on button clicks
         encrypt.setOnAction(event ->{
             int key = Integer.parseInt(plainKey.getText());
-            encryptedText.setText(cipher(plainText.getText(), key));
+            encryptedText.setText(tool.cipher(plainText.getText(), key));
         });
         decrypt.setOnAction(event ->{
             int key = Integer.parseInt(cipherKey.getText());
-            plainText.setText(decipher(encryptedText.getText(),key));
+            plainText.setText(tool.decipher(encryptedText.getText(),key));
         });
 
+
         Scene scene = new Scene(gridPane);
-        primaryStage.setTitle("Caesars Cipher");
+        primaryStage.setTitle("Caesars GUI");
         primaryStage.setScene(scene);
         primaryStage.show();
 
-    }
-
-    /**
-     * Shift Cipher algorithm
-     */
-    private static String cipher(String msg, int shift){
-
-        int key = shift % 26 + 26; //sets key according to shift
-
-        //implemented StringBuilder b/c it is faster and more efficient
-        StringBuilder encryptedMsg = new StringBuilder();
-
-        // splits up message into char array and loops through each char
-        for (char i : msg.toCharArray()){
-
-            //only changes char if it is a letter
-            if (Character.isLetter(i)){
-
-                if (Character.isUpperCase(i)){
-
-                    encryptedMsg.append((char)(((i - 65 + key) % 26) + 65)); // 65 is A in ASCII
-
-                } else { encryptedMsg.append((char)(((i - 97 + key) % 26) + 97));} // 97 is a in ASCII
-
-            } else {encryptedMsg.append(i);}
-        }
-
-        return encryptedMsg.toString();
-    }
-
-    private static String decipher(String msg, int key){
-        return cipher(msg, 26-key);
     }
 
     public static void main(String[] args) {
