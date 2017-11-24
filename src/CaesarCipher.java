@@ -1,8 +1,8 @@
 public class CaesarCipher {
 
-    protected static String cipher(String msg, int shift){
+    protected String cipher(String msg, int shift){
 
-        int key = shift % 26 + 26; //sets key according to shift
+        int key = shift % 95 + 95; //sets key according to shift
 
         //implemented StringBuilder b/c it is faster and more efficient
         StringBuilder encryptedMsg = new StringBuilder();
@@ -15,17 +15,17 @@ public class CaesarCipher {
 
                 if (Character.isUpperCase(i)){
 
-                    encryptedMsg.append((char)(((i - 65 + key) % 26) + 65)); // 65 is A in ASCII
+                    encryptedMsg.append((char)(((i - 65 + key) % 95) + 65)); // 65 is A in ASCII
 
-                } else { encryptedMsg.append((char)(((i - 97 + key) % 26) + 97));} // 97 is a in ASCII
+                } else { encryptedMsg.append((char)(((i - 97 + key) % 95) + 97));} // 97 is a in ASCII
 
-            } else {encryptedMsg.append(i);}
+            } else {encryptedMsg.append((char) (((i - 33 + key) % 95) + 33));}
         }
 
         return encryptedMsg.toString();
     }
 
-    protected static String decipher(String msg, int key){
-        return cipher(msg, 26-key);
+    protected String decipher(String msg, int key){
+        return cipher(msg, 95-key);
     }
 }
