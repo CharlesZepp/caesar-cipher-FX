@@ -8,6 +8,14 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
 
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+
+/**
+ *  A simple FX GUI that allows the user to enter text to encrypt/ decrypt using a
+ *  hybrid of Caesar Cipher and DES (yes very old encryption methods)
+ */
+
 public class GUI extends Application {
 
     private TextArea plainText = new TextArea();
@@ -20,8 +28,12 @@ public class GUI extends Application {
     /* create an instance of cipher tools*/
     private CaesarCipher tool = new CaesarCipher();
 
+
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws Exception {
+
+        SecretKey desKey = KeyGenerator.getInstance("DES").generateKey();
+        DES des = new DES(desKey);
 
         //create basic layout
         GridPane gridPane = new GridPane();
@@ -49,11 +61,24 @@ public class GUI extends Application {
         //implement tool methods on button clicks
         encrypt.setOnAction(event ->{
             int key = Integer.parseInt(plainKey.getText());
-            encryptedText.setText(tool.cipher(plainText.getText(), key));
+            String caesar = tool.cipher(plainText.getText(), key);
+
+            try {
+                String desE = des.encrypt(caesar);
+                encryptedText.setText(desE);
+            } catch (Exception e){
+                System.out.println(e);
+            }
         });
         decrypt.setOnAction(event ->{
             int key = Integer.parseInt(cipherKey.getText());
-            plainText.setText(tool.decipher(encryptedText.getText(),key));
+            try {
+                String desD = des.decrypt(encryptedText.getText());
+                plainText.setText(tool.decipher(desD, key));
+            } catch (Exception e){
+                System.out.println(e);
+            }
+
         });
 
 
