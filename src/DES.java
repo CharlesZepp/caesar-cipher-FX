@@ -15,9 +15,9 @@ public class DES {
     }
 
     protected String encrypt(String msg) throws Exception{
-       byte[] byteMsg = msg.getBytes("UTF8");
-       byte[] encryptedMsg = ecipher.doFinal(byteMsg);
-       return new sun.misc.BASE64Encoder().encode(encryptedMsg);
+        byte[] byteMsg = msg.getBytes("UTF8");
+        byte[] encryptedMsg = ecipher.doFinal(byteMsg);
+        return new sun.misc.BASE64Encoder().encode(encryptedMsg);
     }
 
     protected String decrypt(String msg) throws Exception {
